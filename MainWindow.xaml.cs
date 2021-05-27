@@ -73,9 +73,10 @@ namespace WpfApp_Calc
 
             if (!string.IsNullOrEmpty(Display) && Equation.Count > 0)
             {
-                if (Equation[1] == "/" )
+                if (Equation[1] == "/" && (Equation[2] == "0" || Equation[2] == "0."))
                 {
-                    if(Equation[2] == "0" || Equation[2] == "0.") MessageBox.Show("nieładnie dzielić przez 0");
+                    //if(Equation[2] == "0" || Equation[2] == "0.") 
+                        MessageBox.Show("nieładnie dzielić przez 0");
                 }
                 else
                 {

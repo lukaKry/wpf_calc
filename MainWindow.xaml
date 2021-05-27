@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=local:MainWindow, IsDesignTimeCreatable=True}"
         Title="MainWindow" Height="450" Width="300">
-    <Grid ShowGridLines="True">
+    <Grid>
         
         <!-- styles -->
         <Grid.Resources>
