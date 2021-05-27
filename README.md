@@ -8,3 +8,7 @@ Saved MR value reamains unchanged.
 ## MR button
 Adds displayed number to the memory.
 If clicked when the display is empty retrieves the memorised number and displays it. 
+
+## Display
+At the top left corner is visible the memorised value.
+At the top right corner is visible the current equation operator.
