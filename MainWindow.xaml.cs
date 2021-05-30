@@ -17,7 +17,7 @@ using System.Windows.Shapes;
 
 namespace WpfApp_Calc
 {
-    public enum State {  Initial, NumberEdition, SymbolEdition, Evaluation }
+    public enum State { Initial, NumberEdition, FloatingNumberEdition, SymbolEdition, Evaluation }
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -50,25 +50,36 @@ namespace WpfApp_Calc
         private void On_NumberButton_Clicked(object sender, RoutedEventArgs e)
         {
             // Change App State
-            if ( AppState == State.Initial || AppState == State.SymbolEdition ) AppState = State.NumberEdition;
+            if (AppState == State.Initial || AppState == State.SymbolEdition) AppState = State.NumberEdition;
 
 
             // Change of the Calculator.MainDisplay.Content property
-
+            if (AppState == State.NumberEdition)
+            {
+                Button button = (Button)sender;
+                MyApplication.MainDisplay.AddToDisplay(button.Uid);
+            }
 
         }
 
         private void On_SymbolButton_Clicked(object sender, RoutedEventArgs e)
         {
             // Change App State
-            AppState = State.SymbolEdition;
+            if (AppState == State.NumberEdition || AppState == State.FloatingNumberEdition)
+            {
+                AppState = State.SymbolEdition;
+                MyApplication.Calculator.
+            }
+
+
+            if ( AppState == State.SymbolEdition )
         }
 
         private void On_EqualSignButton_Clicked(object sender, RoutedEventArgs e)
         {
             // Change App State only if NumberEdition State is on
             // In order to disable evoking calculations directly from symbol edition state
-            if ( AppState == State.NumberEdition ) AppState = State.Evaluation;
+            if (AppState == State.NumberEdition) AppState = State.Evaluation;
         }
     }
 }
