@@ -17,12 +17,16 @@ using System.Windows.Shapes;
 
 namespace WpfApp_Calc
 {
+    public enum State {  Initial, NumberEdition, SymbolEdition, Evaluation }
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
         public MyApplication MyApplication { get; set; } = new();
+
+        private State AppState = State.Initial;
 
         public MainWindow()
         {
@@ -31,14 +35,40 @@ namespace WpfApp_Calc
         }
 
 
-        private void On_MemoryButton_Click(object sender, RoutedEventArgs e)
+        private void On_MemoryButton_Clicked(object sender, RoutedEventArgs e)
         {
+            // Not fully implemented yet
             MyApplication.MainDisplay.AddToDisplay("blaa");
         }
 
-        private void On_ClearButton_Click(object sender, RoutedEventArgs e)
+        private void On_ClearButton_Clicked(object sender, RoutedEventArgs e)
         {
+            // not fully implemented yet
             MyApplication.MainDisplay.ClearDisplay();
+        }
+
+        private void On_NumberButton_Clicked(object sender, RoutedEventArgs e)
+        {
+            // Change App State
+            if ( AppState == State.Initial || AppState == State.SymbolEdition ) AppState = State.NumberEdition;
+
+
+            // Change of the Calculator.MainDisplay.Content property
+
+
+        }
+
+        private void On_SymbolButton_Clicked(object sender, RoutedEventArgs e)
+        {
+            // Change App State
+            AppState = State.SymbolEdition;
+        }
+
+        private void On_EqualSignButton_Clicked(object sender, RoutedEventArgs e)
+        {
+            // Change App State only if NumberEdition State is on
+            // In order to disable evoking calculations directly from symbol edition state
+            if ( AppState == State.NumberEdition ) AppState = State.Evaluation;
         }
     }
 }
