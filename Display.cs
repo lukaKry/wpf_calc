@@ -33,7 +33,5 @@ namespace WpfApp_Calc
         {
             Content = input;
         }
-
-       
     }
 }

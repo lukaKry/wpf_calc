@@ -8,7 +8,6 @@ namespace WpfApp_Calc
 {
     public class MyApplication 
     {
-        
         public Calculator Calculator { get; set; }
         public Display MainDisplay { get; set; }
         public Display AdditionalDisplay { get; set; }
@@ -30,28 +29,27 @@ namespace WpfApp_Calc
 
         public void SymbolButtonIsClicked(string buttonUid )
         {
-            // AdditionalDisplay.AddToDisplay(buttonUid);
-             AdditionalDisplay.AddToDisplay($"{MainDisplay.Content} {buttonUid} ");
+            // Udpate Additional Display
+            AdditionalDisplay.AddToDisplay($"{MainDisplay.Content} {buttonUid} ");
            
+            // Update Calculator memory
             Calculator.AddSymbolToTheMemory(buttonUid);
             Calculator.AddNumberToTheMemory(MainDisplay.Content);
-
-            // AdditionalDisplay.AddToDisplay($"{Calculator.CurrentEquation.Numbers[^1]} {Calculator.CurrentEquation.Symbols[^1]} ");
 
             MainDisplay.ClearDisplay();
         }
 
         public void SymbolChange ( string buttonUid )
         {
+            // tu można wymyślić inną metodę aktualizacji ostatniego znaku; ta jest trochę za skomplikowana
             Calculator.ChangeLastSymbolInTheMemory(buttonUid);
             var newInputForAdditionalDisplay = PrepareInputForAdditionalDisplay();
             AdditionalDisplay.ChangeDisplay(newInputForAdditionalDisplay);
-            // AdditionalDisplay.ChangeDisplay(buttonUid);
         }
 
         private string PrepareInputForAdditionalDisplay()
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             for ( int i = 0; i < Calculator.CurrentEquation.Numbers.Count; i++)
             {
                 sb.Append(Calculator.CurrentEquation.Numbers[i] + " ");
@@ -62,21 +60,17 @@ namespace WpfApp_Calc
 
         public void EqualSignIsClicked()
         {
-
             // add last number from the display to the current equation
             Calculator.AddNumberToTheMemory(MainDisplay.Content);
 
             // perform calculations
             Calculator.Calculate();
 
-
             // Refresh Additional Display
             AdditionalDisplay.AddToDisplay(MainDisplay.Content);
 
             // display result
             MainDisplay.Content = Calculator.CurrentEquation.Result.ToString();
-
-
         }
     }
 }

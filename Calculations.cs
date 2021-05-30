@@ -25,6 +25,8 @@
                         break;
                     case "*": result *= LastEquation.Numbers[n];
                         break;
+                    case "/": result /= LastEquation.Numbers[n];
+                        break;
                     default:
                         break;
                 }
