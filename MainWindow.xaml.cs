@@ -20,29 +20,25 @@ namespace WpfApp_Calc
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, INotifyPropertyChanged
+    public partial class MainWindow : Window
     {
-        private Class1 _class1;
-        public Class1 Class1
-        {
-            get { return _class1; }
-            set
-            {
-                _class1 = value;
-                PropertyChanged?.Invoke(this, new(nameof(Class1)));
-            }
-        }
-
+        public MyApplication MyApplication { get; set; } = new();
 
         public MainWindow()
         {
             InitializeComponent();
             DataContext = this;
-            _class1 = new Class1();
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        
+        private void On_MemoryButton_Click(object sender, RoutedEventArgs e)
+        {
+            MyApplication.MainDisplay.AddToDisplay("blaa");
+        }
+
+        private void On_ClearButton_Click(object sender, RoutedEventArgs e)
+        {
+            MyApplication.MainDisplay.ClearDisplay();
+        }
     }
 }
