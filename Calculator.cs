@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace WpfApp_Calc
 {
@@ -6,22 +7,24 @@ namespace WpfApp_Calc
     {
         public List<Equation> Memory { get; set; }
         public Calculations Calculations { get; set; }
+        public Equation CurrentEquation { get; set; } = new();
 
 
-        public void AddNumberToTheMemory() 
-        { 
+        public void ChangeLastSymbolInTheMemory(string symbol)
+        {
+            CurrentEquation.Symbols[^1] = symbol;
+        }
         
-        }
-
-        public void AddSymbolToTheMemory()
+        public void AddNumberToTheMemory(string number) 
         {
-
+            CurrentEquation.Numbers.Add(Double.Parse(number));
         }
 
-        public void EditSymbolInTheMemory()
+        public void AddSymbolToTheMemory(string buttonUid)
         {
-
+            CurrentEquation.Symbols.Add(buttonUid);
         }
+
 
         public string GetLastEquation()
         {
@@ -31,7 +34,8 @@ namespace WpfApp_Calc
 
         public void Calculate()
         {
-            Calculations = new Calculations(GetLastEquation());
+            Calculations = new Calculations(CurrentEquation);
+            CurrentEquation.Result = Calculations.MakeCalculations();
         }
     }
 }

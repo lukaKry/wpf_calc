@@ -2,37 +2,35 @@
 {
     public class Calculations
     {
-        private string LastEquation { get; set; }
+        private Equation LastEquation { get; set; }
 
-        public Calculations(string lastEquation)
+
+        public Calculations(Equation lastEquation)
         {
             LastEquation = lastEquation;
         }
 
-        public void MakeCalculations()
+        public double MakeCalculations()
         {
-            // here is the complex calculation being made
-            // of course using the following private methods
-        }
+            int n = 1;
+            double result = LastEquation.Numbers[0];
 
-        private void Add()
-        {
-
-        }
-
-        private void Substract()
-        {
-
-        }
-
-        private void Multiply()
-        {
-
-        }
-
-        private void Divide()
-        {
-
+            foreach ( var symbol in LastEquation.Symbols)
+            {
+                switch ( symbol )
+                {
+                    case "+": result += LastEquation.Numbers[n]; 
+                        break;
+                    case "-": result -= LastEquation.Numbers[n];
+                        break;
+                    case "*": result *= LastEquation.Numbers[n];
+                        break;
+                    default:
+                        break;
+                }
+                n++;
+            }
+            return result;
         }
     }
 }

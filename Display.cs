@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace WpfApp_Calc
 {
@@ -27,5 +28,12 @@ namespace WpfApp_Calc
         {
             Content = "";
         }
+
+        public void ChangeDisplay(string input)
+        {
+            Content = input;
+        }
+
+       
     }
 }

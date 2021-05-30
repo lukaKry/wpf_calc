@@ -52,10 +52,11 @@
             TextWrapping="WrapWithOverflow"
             />
         
-        <!-- additional display 
+        <!-- additional display  -->
         <TextBlock
-            Text="{Binding AdditionalDisplay}"
-            Grid.Column="3" 
+            Text="{Binding MyApplication.AdditionalDisplay.Content}"
+            Grid.Column="2" 
+            Grid.ColumnSpan="2"
             
             FontSize="20"
             Foreground="Gray"
@@ -63,7 +64,7 @@
             VerticalAlignment="Center"
             Margin="5"
             />
-
+<!--
         <TextBlock
             Text="{Binding Memory}"
 

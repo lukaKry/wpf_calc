@@ -50,36 +50,47 @@ namespace WpfApp_Calc
         private void On_NumberButton_Clicked(object sender, RoutedEventArgs e)
         {
             // Change App State
-            if (AppState == State.Initial || AppState == State.SymbolEdition) AppState = State.NumberEdition;
+            if (AppState != State.NumberEdition) AppState = State.NumberEdition;
 
 
             // Change of the Calculator.MainDisplay.Content property
             if (AppState == State.NumberEdition)
             {
                 Button button = (Button)sender;
-                MyApplication.MainDisplay.AddToDisplay(button.Uid);
+                MyApplication.NumberButtonIsClicked(button.Uid);
             }
 
         }
 
         private void On_SymbolButton_Clicked(object sender, RoutedEventArgs e)
         {
+            Button button = (Button)sender;
+
             // Change App State
             if (AppState == State.NumberEdition || AppState == State.FloatingNumberEdition)
             {
                 AppState = State.SymbolEdition;
-                MyApplication.Calculator.
+                MyApplication.SymbolButtonIsClicked(button.Uid);
             }
 
+            // No App state Change; only Symbol change
+            else if (AppState == State.SymbolEdition) MyApplication.SymbolChange(button.Uid);
 
-            if ( AppState == State.SymbolEdition )
         }
 
         private void On_EqualSignButton_Clicked(object sender, RoutedEventArgs e)
         {
             // Change App State only if NumberEdition State is on
             // In order to disable evoking calculations directly from symbol edition state
-            if (AppState == State.NumberEdition) AppState = State.Evaluation;
+            if (AppState == State.NumberEdition)
+            {
+                AppState = State.Evaluation;
+                MyApplication.EqualSignIsClicked();
+
+                // Reset the Calculator memory
+                // Set the AppStatus to the InitStatus
+                AppState = State.Initial;
+            }
         }
     }
 }
