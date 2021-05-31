@@ -12,10 +12,10 @@ namespace WpfApp_Calc
             LastEquation = lastEquation;
         }
 
-        public double MakeCalculations()
+        public decimal MakeCalculations()
         {
             int n = 1;
-            double result = LastEquation.Numbers[0];
+            decimal result = LastEquation.Numbers[0];
 
             foreach ( var symbol in LastEquation.Symbols)
             {

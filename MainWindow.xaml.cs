@@ -43,11 +43,14 @@ namespace WpfApp_Calc
         {
             // only shows the last successfull equation
             MyApplication.MemoryButtonIsClicked();
+            AppState = State.Evaluation;
+            FloatingState = false;
         }
 
         private void On_ClearButton_Clicked(object sender, RoutedEventArgs e)
         {
             MyApplication.ClearButtonIsClicked();
+            FloatingState = false;
         }
 
         private void On_NumberButton_Clicked(object sender, RoutedEventArgs e)

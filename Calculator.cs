@@ -21,7 +21,7 @@ namespace WpfApp_Calc
             //NumberFormatInfo provider = new ();
             //provider.NumberDecimalSeparator = ".";
             // CurrentEquation.Numbers.Add(Convert.ToDouble(number, provider));
-            CurrentEquation.Numbers.Add(Convert.ToDouble(number));
+            CurrentEquation.Numbers.Add(Convert.ToDecimal(number));
         }
 
         public void AddSymbolToTheMemory(string buttonUid)
