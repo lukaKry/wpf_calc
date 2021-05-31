@@ -28,6 +28,10 @@ namespace WpfApp_Calc
 
         private State AppState = State.Initial;
 
+        private bool FloatingState = false;
+
+        private bool AtLeastOneSymbolInTheEquation = false;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -37,23 +41,29 @@ namespace WpfApp_Calc
 
         private void On_MemoryButton_Clicked(object sender, RoutedEventArgs e)
         {
-            // Not fully implemented yet
-            MyApplication.MainDisplay.AddToDisplay("blaa");
+            // only shows the last successfull equation
+            MyApplication.MemoryButtonIsClicked();
         }
 
         private void On_ClearButton_Clicked(object sender, RoutedEventArgs e)
         {
-            // not fully implemented yet
-            MyApplication.MainDisplay.ClearDisplay();
+            MyApplication.ClearButtonIsClicked();
         }
 
         private void On_NumberButton_Clicked(object sender, RoutedEventArgs e)
         {
+            // If Clicked after evaluation
+            if (AppState == State.Evaluation)
+            {
+                MyApplication.ClearButtonIsClicked();
+                AtLeastOneSymbolInTheEquation = false;
+            }
+
             // Change App State
             if (AppState != State.NumberEdition) AppState = State.NumberEdition;
 
 
-            // Change of the Calculator.MainDisplay.Content property
+            // Trigger the button
             if (AppState == State.NumberEdition)
             {
                 Button button = (Button)sender;
@@ -67,9 +77,11 @@ namespace WpfApp_Calc
             Button button = (Button)sender;
 
             // Change App State
-            if (AppState == State.NumberEdition || AppState == State.FloatingNumberEdition)
+            if (AppState == State.NumberEdition)
             {
+                FloatingState = false;
                 AppState = State.SymbolEdition;
+                AtLeastOneSymbolInTheEquation = true;
                 MyApplication.SymbolButtonIsClicked(button.Uid);
             }
 
@@ -84,12 +96,35 @@ namespace WpfApp_Calc
             // In order to disable evoking calculations directly from symbol edition state
             if (AppState == State.NumberEdition)
             {
+                FloatingState = false;
                 AppState = State.Evaluation;
-                MyApplication.EqualSignIsClicked();
 
-                // Reset the Calculator memory
-                // Set the AppStatus to the InitStatus
-                AppState = State.Initial;
+                try
+                {
+                    MyApplication.EqualSignIsClicked();
+
+                    // Send current equation to the long term memory
+                    MyApplication.SaveCurrentEquationToTheLongTermMemory();
+                }
+                catch (DivideByZeroException)
+                {
+                    MessageBox.Show("nastąpiła próba dzielenia przez 0");
+                    MyApplication.ClearButtonIsClicked();
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Ups, coś poszło nie tak");
+                }
+
+            }
+        }
+
+        private void On_CommaButton_Clicked(object sender, RoutedEventArgs e)
+        {
+            if (FloatingState == false && AppState != State.Evaluation)
+            {
+                FloatingState = true;
+                MyApplication.CommaButtonIsClicked();
             }
         }
     }

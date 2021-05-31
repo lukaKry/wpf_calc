@@ -1,4 +1,6 @@
-﻿namespace WpfApp_Calc
+﻿using System;
+
+namespace WpfApp_Calc
 {
     public class Calculations
     {
@@ -25,7 +27,9 @@
                         break;
                     case "*": result *= LastEquation.Numbers[n];
                         break;
-                    case "/": result /= LastEquation.Numbers[n];
+                    case "/":
+                        if (LastEquation.Numbers[n] == 0) throw new DivideByZeroException();
+                        result /= LastEquation.Numbers[n];
                         break;
                     default:
                         break;

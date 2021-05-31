@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace WpfApp_Calc
 {
     public class Calculator
     {
-        public List<Equation> Memory { get; set; }
+        public List<Equation> Memory { get; set; } = new();
         public Calculations Calculations { get; set; }
         public Equation CurrentEquation { get; set; } = new();
 
@@ -14,10 +15,13 @@ namespace WpfApp_Calc
         {
             CurrentEquation.Symbols[^1] = symbol;
         }
-        
-        public void AddNumberToTheMemory(string number) 
+
+        public void AddNumberToTheMemory(string number)
         {
-            CurrentEquation.Numbers.Add(Double.Parse(number));
+            //NumberFormatInfo provider = new ();
+            //provider.NumberDecimalSeparator = ".";
+            // CurrentEquation.Numbers.Add(Convert.ToDouble(number, provider));
+            CurrentEquation.Numbers.Add(Convert.ToDouble(number));
         }
 
         public void AddSymbolToTheMemory(string buttonUid)
@@ -32,10 +36,27 @@ namespace WpfApp_Calc
             return a;
         }
 
+        public void SaveCurrentEquation()
+        {
+            Memory.Add(CurrentEquation);
+        }
+
+        public void ResetCurrentEquation()
+        {
+            CurrentEquation = new Equation();
+        }
+
         public void Calculate()
         {
-            Calculations = new Calculations(CurrentEquation);
-            CurrentEquation.Result = Calculations.MakeCalculations();
+            try
+            {
+                Calculations = new Calculations(CurrentEquation);
+                CurrentEquation.Result = Calculations.MakeCalculations();
+            }
+            catch (DivideByZeroException)
+            {
+                throw new DivideByZeroException();
+            }
         }
     }
 }

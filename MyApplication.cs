@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WpfApp_Calc
 {
-    public class MyApplication 
+    public class MyApplication
     {
         public Calculator Calculator { get; set; }
         public Display MainDisplay { get; set; }
@@ -20,18 +20,18 @@ namespace WpfApp_Calc
             AdditionalDisplay = new Display();
             MemoryDisplay = new Display();
         }
-        
 
-        public void NumberButtonIsClicked( string buttonUid )
+
+        public void NumberButtonIsClicked(string buttonUid)
         {
             MainDisplay.AddToDisplay(buttonUid);
         }
 
-        public void SymbolButtonIsClicked(string buttonUid )
+        public void SymbolButtonIsClicked(string buttonUid)
         {
             // Udpate Additional Display
             AdditionalDisplay.AddToDisplay($"{MainDisplay.Content} {buttonUid} ");
-           
+
             // Update Calculator memory
             Calculator.AddSymbolToTheMemory(buttonUid);
             Calculator.AddNumberToTheMemory(MainDisplay.Content);
@@ -39,32 +39,20 @@ namespace WpfApp_Calc
             MainDisplay.ClearDisplay();
         }
 
-        public void SymbolChange ( string buttonUid )
-        {
-            // tu można wymyślić inną metodę aktualizacji ostatniego znaku; ta jest trochę za skomplikowana
-            Calculator.ChangeLastSymbolInTheMemory(buttonUid);
-            var newInputForAdditionalDisplay = PrepareInputForAdditionalDisplay();
-            AdditionalDisplay.ChangeDisplay(newInputForAdditionalDisplay);
-        }
-
-        private string PrepareInputForAdditionalDisplay()
-        {
-            StringBuilder sb = new();
-            for ( int i = 0; i < Calculator.CurrentEquation.Numbers.Count; i++)
-            {
-                sb.Append(Calculator.CurrentEquation.Numbers[i] + " ");
-                sb.Append(Calculator.CurrentEquation.Symbols[i] + " ");
-            }
-            return sb.ToString();
-        }
-
         public void EqualSignIsClicked()
         {
             // add last number from the display to the current equation
             Calculator.AddNumberToTheMemory(MainDisplay.Content);
 
-            // perform calculations
-            Calculator.Calculate();
+            try
+            {
+                // perform calculations
+                Calculator.Calculate();
+            }
+            catch (DivideByZeroException)
+            {
+                throw new DivideByZeroException();
+            }
 
             // Refresh Additional Display
             AdditionalDisplay.AddToDisplay(MainDisplay.Content);
@@ -72,5 +60,54 @@ namespace WpfApp_Calc
             // display result
             MainDisplay.Content = Calculator.CurrentEquation.Result.ToString();
         }
+
+        public void CommaButtonIsClicked()
+        {
+            if (MainDisplay.Content == "") MainDisplay.AddToDisplay("0");
+            MainDisplay.AddToDisplay(",");
+        }
+
+        public void ClearButtonIsClicked()
+        {
+            MainDisplay.Content = "";
+            AdditionalDisplay.Content = "";
+            Calculator.CurrentEquation = new Equation();
+        }
+
+        public void MemoryButtonIsClicked()
+        {
+            if (Calculator.Memory.Count > 0)
+            {
+                var memory = $"{PrepareInputForAdditionalDisplay(Calculator.Memory[^1])} = {Calculator.Memory[^1].Result}";
+                ClearButtonIsClicked();
+                AdditionalDisplay.AddToDisplay(memory);
+            }
+        }
+
+        public void SaveCurrentEquationToTheLongTermMemory()
+        {
+            Calculator.SaveCurrentEquation();
+            Calculator.ResetCurrentEquation();
+        }
+
+        public void SymbolChange(string buttonUid)
+        {
+            Calculator.ChangeLastSymbolInTheMemory(buttonUid);
+            var newInputForAdditionalDisplay = PrepareInputForAdditionalDisplay(Calculator.CurrentEquation);
+            AdditionalDisplay.ChangeDisplay(newInputForAdditionalDisplay);
+        }
+
+        private string PrepareInputForAdditionalDisplay(Equation equation)
+        {
+            StringBuilder sb = new();
+            for (int i = 0; i < equation.Numbers.Count; i++)
+            {
+                sb.Append(equation.Numbers[i] + " ");
+                if ( equation.Symbols.Count > i) 
+                    sb.Append(equation.Symbols[i] + " ");
+            }
+            return sb.ToString();
+        }
+
     }
 }
